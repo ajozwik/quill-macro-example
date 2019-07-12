@@ -1,4 +1,5 @@
-
+import pl.jozwik.quillgeneric.sbt.RepositoryDescription
+import pl.jozwik.quillgeneric.sbt.QuillRepositoryPlugin._
 
 val `scala_2.12` = "2.12.8"
 
@@ -26,15 +27,21 @@ val `com.typesafe.scala-logging_scala-logging` = "com.typesafe.scala-logging" %%
 
 val `ch.qos.logback_logback-classic` = "ch.qos.logback" % "logback-classic" % "1.2.3"
 
+val `com.h2database_h2` = "com.h2database" % "h2" % "1.4.192"
+
 lazy val root = project.in(file(".")).settings(
   libraryDependencies ++= Seq(
     `org.scalatest_scalatest`,
     `org.scalacheck_scalacheck`,
     `com.typesafe.scala-logging_scala-logging`,
-    `ch.qos.logback_logback-classic`
+    `ch.qos.logback_logback-classic`,
+    `com.h2database_h2`
   ),
-  repositories := Seq(RepositoryDescription("pl.jozwik.model.Person", "pl.jozwik.model.PersonId", "pl.jozwik.repository.PersonRepository"))
+  generateDescription := Seq(
+    RepositoryDescription("pl.jozwik.example.model.Person",
+    "pl.jozwik.example.model.PersonId",
+    "pl.jozwik.example.repository.PersonRepository"))
 )
-  .enablePlugins(SbtQuillCrudGenericPlugin)
+  .enablePlugins(QuillRepositoryPlugin)
 
 
