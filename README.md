@@ -16,12 +16,12 @@ final case class PersonId(value: Int) extends AnyVal
 final case class Person(id: PersonId, firstName: String, lastName: String, birthDate: LocalDate) extends WithId[PersonId]
 ```
 
-- add imports:
+- add imports (to build.sbt):
 ```
 import pl.jozwik.quillgeneric.sbt.RepositoryDescription
 import pl.jozwik.quillgeneric.sbt.QuillRepositoryPlugin._
 ```
-- add settings
+- add settings (to build.sbt):
 ```
   generateDescription := Seq(
     RepositoryDescription("pl.jozwik.example.model.Person",
@@ -29,7 +29,7 @@ import pl.jozwik.quillgeneric.sbt.QuillRepositoryPlugin._
     "pl.jozwik.example.repository.PersonRepository"))
 ```
 
-- enable auto plugin
+- enable auto plugin (in build.sbt):
 
 ```
   enablePlugins(QuillRepositoryPlugin)
