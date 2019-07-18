@@ -26,7 +26,11 @@ import pl.jozwik.quillgeneric.sbt.QuillRepositoryPlugin._
   generateDescription := Seq(
     RepositoryDescription("pl.jozwik.example.model.Person",
     "pl.jozwik.example.model.PersonId",
-    "pl.jozwik.example.repository.PersonRepository"))
+    "pl.jozwik.example.repository.PersonRepository"),
+    RepositoryDescription("pl.jozwik.example.model.Address",
+      "pl.jozwik.example.model.AddressId",
+      "pl.jozwik.example.repository.AddressRepository")
+      )
 ```
 
 - enable auto plugin (in build.sbt):
