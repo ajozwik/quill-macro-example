@@ -3,6 +3,8 @@ import pl.jozwik.quillgeneric.sbt.QuillRepositoryPlugin._
 
 val `scala_2.12` = "2.12.8"
 
+ThisBuild / scapegoatVersion := "1.3.9"
+
 ThisBuild / organization := "pl.jozwik.demo"
 
 ThisBuild / name := "quill-macro-example"
@@ -40,7 +42,12 @@ lazy val root = project.in(file(".")).settings(
   generateDescription := Seq(
     RepositoryDescription("pl.jozwik.example.model.Person",
     "pl.jozwik.example.model.PersonId",
-    "pl.jozwik.example.repository.PersonRepository"))
+    "pl.jozwik.example.repository.PersonRepository"),
+
+    RepositoryDescription("pl.jozwik.example.model.Address",
+      "pl.jozwik.example.model.AddressId",
+      "pl.jozwik.example.repository.AddressRepository")),
+  quillMacroVersion := "0.1.4"
 )
   .enablePlugins(QuillRepositoryPlugin)
 
