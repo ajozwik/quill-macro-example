@@ -40,7 +40,7 @@ class QueriesSpec extends AbstractQuillSpec {
     }
 
     "Call all operations on Person2 with auto generated id" in {
-      val person = Person(PersonId(2), "firstName", "lastName", LocalDate.now)
+      val person = Person(PersonId.empty, "firstName", "lastName", LocalDate.now)
       personRepositoryAutoIncrement.all shouldBe Try(Seq())
       val personId = personRepositoryAutoIncrement.create(person, generateId) match {
         case Failure(th) =>

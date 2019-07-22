@@ -1,4 +1,4 @@
-addSbtPlugin("com.github.ajozwik" % "sbt-quill-crud-generic" % "0.1.1")
+addSbtPlugin("com.github.ajozwik" % "sbt-quill-crud-generic" % "0.1.2")
 
 addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "1.0.0")
 

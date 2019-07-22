@@ -7,8 +7,6 @@ ThisBuild / scapegoatVersion := "1.3.9"
 
 ThisBuild / organization := "pl.jozwik.demo"
 
-ThisBuild / name := "quill-macro-example"
-
 ThisBuild / scalacOptions ++= Seq(
   "-encoding", "utf8", // Option and arguments on same line
   "-Xfatal-warnings", // New lines for each options
@@ -31,7 +29,7 @@ val `ch.qos.logback_logback-classic` = "ch.qos.logback" % "logback-classic" % "1
 
 val `com.h2database_h2` = "com.h2database" % "h2" % "1.4.192"
 
-lazy val root = project.in(file(".")).settings(
+lazy val root = Project("quill-macro-example", file(".")).settings(
   libraryDependencies ++= Seq(
     `org.scalatest_scalatest`,
     `org.scalacheck_scalacheck`,
@@ -47,7 +45,7 @@ lazy val root = project.in(file(".")).settings(
     RepositoryDescription("pl.jozwik.example.model.Address",
       "pl.jozwik.example.model.AddressId",
       "pl.jozwik.example.repository.AddressRepository")),
-  quillMacroVersion := "0.1.4"
+  quillMacroVersion := "0.1.5"
 )
   .enablePlugins(QuillRepositoryPlugin)
 
