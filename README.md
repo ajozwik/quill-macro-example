@@ -1,5 +1,7 @@
 # quill-macro-example
 
+[![Build Status](https://travis-ci.org/ajozwik/quill-macro-example.svg?branch=master)](https://travis-ci.org/ajozwik/quill-macro-example)
+
 Example of usage [sbt-quill-crud-generic](https://github.com/ajozwik/sbt-quill-crud-generic) plugin
 
 - create model classes (must be visible during compilation)
