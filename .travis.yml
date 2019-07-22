@@ -14,7 +14,7 @@ jdk:
   - openjdk8
 
 script:
-  - sbt ++$TRAVIS_SCALA_VERSION clean test scalastyle
+  - sbt ++$TRAVIS_SCALA_VERSION -Dquill.macro.log=false -Dquill.binds.log=true clean test scalastyle
 
 after_success:
    # Tricks to avoid unnecessary cache updates
