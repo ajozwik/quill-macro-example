@@ -40,12 +40,13 @@ lazy val root = Project("quill-macro-example", file(".")).settings(
   generateDescription := Seq(
     RepositoryDescription("pl.jozwik.example.model.Person",
     "pl.jozwik.example.model.PersonId",
-    "pl.jozwik.example.repository.PersonRepository"),
+    "pl.jozwik.example.repository.PersonRepository",
+      None),
 
     RepositoryDescription("pl.jozwik.example.model.Address",
       "pl.jozwik.example.model.AddressId",
-      "pl.jozwik.example.repository.AddressRepository")),
-  quillMacroVersion := "0.1.5"
+      "pl.jozwik.example.repository.AddressRepository",None, Map("city"-> "city"))),
+  quillMacroVersion := "0.2.0"
 )
   .enablePlugins(QuillRepositoryPlugin)
 
