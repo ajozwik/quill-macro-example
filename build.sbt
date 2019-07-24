@@ -35,7 +35,7 @@ lazy val root = Project("quill-macro-example", file(".")).settings(
     `org.scalacheck_scalacheck`,
     `com.typesafe.scala-logging_scala-logging`,
     `ch.qos.logback_logback-classic`,
-    `com.h2database_h2`
+    `com.h2database_h2` % Test
   ),
   generateDescription := Seq(
     RepositoryDescription("pl.jozwik.example.model.Person",
