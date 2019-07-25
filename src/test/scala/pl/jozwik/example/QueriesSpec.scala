@@ -4,7 +4,7 @@ import java.time.LocalDate
 
 import org.scalatest.TryValues._
 import pl.jozwik.example.model.{Address, AddressId, Person, PersonId}
-import pl.jozwik.example.repository.{AddressRepository, PersonRepository}
+import pl.jozwik.example.repository.AddressRepository
 
 import scala.util.{Failure, Success}
 

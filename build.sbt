@@ -1,7 +1,8 @@
 import pl.jozwik.quillgeneric.sbt.RepositoryDescription
-import pl.jozwik.quillgeneric.sbt.QuillRepositoryPlugin._
 
 val `scala_2.12` = "2.12.8"
+
+resolvers += Resolver.sonatypeRepo("releases")
 
 ThisBuild / scapegoatVersion := "1.3.9"
 
@@ -41,7 +42,7 @@ lazy val root = Project("quill-macro-example", file(".")).settings(
     RepositoryDescription("pl.jozwik.example.model.Person",
     "pl.jozwik.example.model.PersonId",
     "pl.jozwik.example.repository.PersonRepository",
-      Option("pl.jozwik.example.MyPersonRepository"),
+      Option("pl.jozwik.example.MyPersonRepository[Dialect, Naming]"),
       None),
     RepositoryDescription("pl.jozwik.example.model.Address",
       "pl.jozwik.example.model.AddressId",
@@ -52,7 +53,7 @@ lazy val root = Project("quill-macro-example", file(".")).settings(
     RepositoryDescription("pl.jozwik.example.model.Person",
       "pl.jozwik.example.model.PersonId",
       "pl.jozwik.example.PersonRepository",
-      Option("pl.jozwik.example.MyPersonRepository"),
+      Option("pl.jozwik.example.MyPersonRepository[Dialect, Naming]"),
       None)
   )
 )
