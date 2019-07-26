@@ -61,7 +61,7 @@ and point to them
  RepositoryDescription("pl.jozwik.example.model.Person",
       "pl.jozwik.example.model.PersonId",
       "pl.jozwik.example.PersonRepository",
-      Option("pl.jozwik.example.MyPersonRepository")
+      Option("pl.jozwik.example.MyPersonRepository[Dialect,Naming]")
   )
 ```
 
