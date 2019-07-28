@@ -28,7 +28,7 @@ val `com.typesafe.scala-logging_scala-logging` = "com.typesafe.scala-logging" %%
 
 val `ch.qos.logback_logback-classic` = "ch.qos.logback" % "logback-classic" % "1.2.3"
 
-val `com.h2database_h2` = "com.h2database" % "h2" % "1.4.192"
+val `com.h2database_h2` = "com.h2database" % "h2" % "1.4.199"
 
 lazy val root = Project("quill-macro-example", file(".")).settings(
   libraryDependencies ++= Seq(
@@ -42,19 +42,30 @@ lazy val root = Project("quill-macro-example", file(".")).settings(
     RepositoryDescription("pl.jozwik.example.model.Person",
     "pl.jozwik.example.model.PersonId",
     "pl.jozwik.example.repository.PersonRepository",
+      true,
       Option("pl.jozwik.example.MyPersonRepository[Dialect, Naming]"),
       None),
     RepositoryDescription("pl.jozwik.example.model.Address",
       "pl.jozwik.example.model.AddressId",
       "pl.jozwik.example.repository.AddressRepository",
+      true,
       None,
       None,
       Map("city"-> "city")),
     RepositoryDescription("pl.jozwik.example.model.Person",
       "pl.jozwik.example.model.PersonId",
       "pl.jozwik.example.PersonRepository",
+      true,
       Option("pl.jozwik.example.MyPersonRepository[Dialect, Naming]"),
-      None)
+      None),
+    RepositoryDescription("pl.jozwik.example.model.Configuration",
+      "pl.jozwik.example.model.ConfigurationId",
+      "pl.jozwik.example.ConfigurationRepository",
+      false,
+      None,
+      None,
+      Map("id"->"key")
+    )
   )
 )
   .enablePlugins(QuillRepositoryPlugin)

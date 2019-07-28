@@ -18,6 +18,11 @@ final case class PersonId(value: Int) extends AnyVal
 final case class Person(id: PersonId, firstName: String, lastName: String, birthDate: LocalDate) extends WithId[PersonId]
 ```
 
+- add plugin (project/plugins.sbt)
+```
+addSbtPlugin("com.github.ajozwik" % "sbt-quill-crud-generic" % "<version>")
+```
+
 - add imports (to build.sbt):
 ```
 import pl.jozwik.quillgeneric.sbt.RepositoryDescription
