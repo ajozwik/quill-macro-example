@@ -1,4 +1,4 @@
-package pl.jozwik.example
+package pl.jozwik.example.repository
 
 import java.time.LocalDate
 
