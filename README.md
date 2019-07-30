@@ -45,7 +45,7 @@ import pl.jozwik.quillgeneric.sbt.QuillRepositoryPlugin._
 For simpler inject support (guice/spring) you can use own trait
 
 ```
-package pl.jozwik.example
+package pl.jozwik.example.repository
 
 import java.time.LocalDate
 
