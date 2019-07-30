@@ -32,7 +32,7 @@ class QueriesSpec extends AbstractQuillSpec {
       }
       personRepository.read(notExisting.id).success.value shouldBe empty
       personRepository.read(person.id).success.value shouldBe Option(person)
-      personRepository.update(person) shouldBe 'success
+      personRepository.createOrUpdate(person) shouldBe 'success
       personRepository.all shouldBe Success(Seq(person))
       personRepository.delete(person.id) shouldBe 'success
       personRepository.all shouldBe Success(Seq())
