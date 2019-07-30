@@ -21,8 +21,8 @@ class QueriesSpec extends AbstractQuillSpec {
     "Call all operations on Person" in {
       val personRepository = new PersonRepository(ctx, "Person")
       val address = Address(addressId, "Poland", "Warsaw", Option("Podbipiety"))
-      val person = Person(PersonId(1), "firstName", "lastName", LocalDate.now, Option(addressId))
-      val notExisting = Person(PersonId(2), "firstName", "lastName", LocalDate.now, Option(addressId))
+      val person = Person(PersonId(1), "firstName", "lastName", today.minusYears(2), Option(addressId))
+      val notExisting = Person(PersonId(2), "firstName", "lastName", today, Option(addressId))
       ctx.transaction {
         personRepository.all shouldBe Success(Seq())
         val addressIdTry = addressRepository.create(address)
@@ -34,13 +34,14 @@ class QueriesSpec extends AbstractQuillSpec {
       personRepository.read(person.id).success.value shouldBe Option(person)
       personRepository.createOrUpdate(person) shouldBe 'success
       personRepository.all shouldBe Success(Seq(person))
+      personRepository.youngerThan(person.birthDate.minusDays(1)) shouldBe Success(Seq(person))
       personRepository.delete(person.id) shouldBe 'success
       personRepository.all shouldBe Success(Seq())
 
     }
 
     "Call all operations on Person2 with auto generated id" in {
-      val person = Person(PersonId.empty, "firstName", "lastName", LocalDate.now)
+      val person = Person(PersonId.empty, "firstName", "lastName", today)
       personRepositoryAutoIncrement.all shouldBe Success(Seq())
       val personId = personRepositoryAutoIncrement.create(person, generateId) match {
         case Failure(th) =>

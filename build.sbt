@@ -64,7 +64,7 @@ lazy val root = Project("quill-macro-example", file(".")).settings(
       false,
       None,
       None,
-      Map("id"->"key")
+      Map("id" -> "key")
     )
   )
 )

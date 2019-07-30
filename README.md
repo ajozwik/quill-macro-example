@@ -33,7 +33,9 @@ import pl.jozwik.quillgeneric.sbt.QuillRepositoryPlugin._
   generateDescription := Seq(
     RepositoryDescription("pl.jozwik.example.model.Person",
     "pl.jozwik.example.model.PersonId",
-    "pl.jozwik.example.repository.PersonRepository"),
+    "pl.jozwik.example.repository.PersonRepository",
+    true,
+    Option("pl.jozwik.example.repository.MyPersonRepository[Dialect, Naming]")),
     RepositoryDescription("pl.jozwik.example.model.Address",
       "pl.jozwik.example.model.AddressId",
       "pl.jozwik.example.repository.AddressRepository")
@@ -60,14 +62,6 @@ trait MyPersonRepository[Dialect <: SqlIdiom, Naming <: NamingStrategy]
     context.run(r.max)
   }
 }
-```
-and point to them
-```
- RepositoryDescription("pl.jozwik.example.model.Person",
-      "pl.jozwik.example.model.PersonId",
-      "pl.jozwik.example.PersonRepository",
-      Option("pl.jozwik.example.repository.MyPersonRepository[Dialect,Naming]")
-  )
 ```
 
 - enable auto plugin (in build.sbt):
