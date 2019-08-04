@@ -1,4 +1,5 @@
 import pl.jozwik.quillgeneric.sbt.RepositoryDescription
+import scalariform.formatter.preferences._
 
 val `scala_2.12` = "2.12.8"
 
@@ -66,7 +67,11 @@ lazy val root = Project("quill-macro-example", file(".")).settings(
       None,
       Map("id" -> "key")
     )
-  )
+  ),
+  scalariformPreferences := scalariformPreferences.value
+    .setPreference(AlignSingleLineCaseStatements, true)
+    .setPreference(DoubleIndentConstructorArguments, true)
+    .setPreference(DanglingCloseParenthesis, Preserve)
 )
   .enablePlugins(QuillRepositoryPlugin)
 

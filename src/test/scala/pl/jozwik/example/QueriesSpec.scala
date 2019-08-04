@@ -3,16 +3,16 @@ package pl.jozwik.example
 import java.time.LocalDate
 
 import org.scalatest.TryValues._
-import pl.jozwik.example.model.{Address, AddressId, Configuration, ConfigurationId, Person, PersonId}
+import pl.jozwik.example.model.{ Address, AddressId, Configuration, ConfigurationId, Person, PersonId }
 import pl.jozwik.example.repository.AddressRepository
 
-import scala.util.{Failure, Success, Try}
+import scala.util.{ Failure, Success, Try }
 
 class QueriesSpec extends AbstractQuillSpec {
 
-
   private lazy val personRepositoryAutoIncrement = new PersonRepository(ctx, "Person2")
   private lazy val addressRepository = new AddressRepository(ctx, "Address")
+  private val (offset, limit) = (0, 100)
 
   private val generateId = true
   private val addressId = AddressId(1)
@@ -34,7 +34,7 @@ class QueriesSpec extends AbstractQuillSpec {
       personRepository.read(person.id).success.value shouldBe Option(person)
       personRepository.createOrUpdate(person) shouldBe 'success
       personRepository.all shouldBe Success(Seq(person))
-      personRepository.youngerThan(person.birthDate.minusDays(1)) shouldBe Success(Seq(person))
+      personRepository.youngerThan(person.birthDate.minusDays(1))(offset, limit) shouldBe Success(Seq(person))
       personRepository.delete(person.id) shouldBe 'success
       personRepository.all shouldBe Success(Seq())
 

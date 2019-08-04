@@ -1,6 +1,8 @@
 resolvers += Resolver.sonatypeRepo("releases")
 
-addSbtPlugin("com.github.ajozwik" % "sbt-quill-crud-generic" % "0.4.1")
+addSbtPlugin("org.scalariform" % "sbt-scalariform" % "1.8.2")
+
+addSbtPlugin("com.github.ajozwik" % "sbt-quill-crud-generic" % "0.4.3.1")
 
 addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "1.0.0")
 
