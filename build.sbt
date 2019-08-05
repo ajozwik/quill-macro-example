@@ -31,37 +31,27 @@ val `ch.qos.logback_logback-classic` = "ch.qos.logback" % "logback-classic" % "1
 
 val `com.h2database_h2` = "com.h2database" % "h2" % "1.4.199"
 
+val domainModelPackage = "pl.jozwik.example.domain.model"
+val implementationPackage = "pl.jozwik.example.impl"
+
 lazy val root = Project("quill-macro-example", file(".")).settings(
-  libraryDependencies ++= Seq(
-    `org.scalatest_scalatest`,
-    `org.scalacheck_scalacheck`,
-    `com.typesafe.scala-logging_scala-logging`,
-    `ch.qos.logback_logback-classic`,
-    `com.h2database_h2` % Test
-  ),
   generateDescription := Seq(
-    RepositoryDescription("pl.jozwik.example.model.Person",
-    "pl.jozwik.example.model.PersonId",
-    "pl.jozwik.example.repository.PersonRepository",
+    RepositoryDescription(s"$domainModelPackage.Person",
+      s"$domainModelPackage.PersonId",
+      s"pl.jozwik.example.repository.PersonRepositoryGen",
       true,
-      Option("pl.jozwik.example.repository.MyPersonRepository[Dialect, Naming]"),
+      Option(s"$implementationPackage.PersonRepositoryImpl[Dialect, Naming]"),
       None),
-    RepositoryDescription("pl.jozwik.example.model.Address",
-      "pl.jozwik.example.model.AddressId",
-      "pl.jozwik.example.repository.AddressRepository",
+    RepositoryDescription(s"$domainModelPackage.Address",
+      s"$domainModelPackage.AddressId",
+      "pl.jozwik.example.repository.AddressRepositoryGen",
       true,
+      Option(s"$implementationPackage.AddressRepositoryImpl[Dialect, Naming]"),
       None,
-      None,
-      Map("city"-> "city")),
-    RepositoryDescription("pl.jozwik.example.model.Person",
-      "pl.jozwik.example.model.PersonId",
-      "pl.jozwik.example.PersonRepository",
-      true,
-      Option("pl.jozwik.example.repository.MyPersonRepository[Dialect, Naming]"),
-      None),
-    RepositoryDescription("pl.jozwik.example.model.Configuration",
-      "pl.jozwik.example.model.ConfigurationId",
-      "pl.jozwik.example.ConfigurationRepository",
+      Map("city" -> "city")),
+    RepositoryDescription(s"$domainModelPackage.Configuration",
+      s"$domainModelPackage.ConfigurationId",
+      "pl.jozwik.example.ConfigurationRepositoryGen",
       false,
       None,
       None,
@@ -71,7 +61,14 @@ lazy val root = Project("quill-macro-example", file(".")).settings(
   scalariformPreferences := scalariformPreferences.value
     .setPreference(AlignSingleLineCaseStatements, true)
     .setPreference(DoubleIndentConstructorArguments, true)
-    .setPreference(DanglingCloseParenthesis, Preserve)
+    .setPreference(DanglingCloseParenthesis, Preserve),
+  libraryDependencies ++= Seq(
+    `org.scalatest_scalatest`,
+    `org.scalacheck_scalacheck`,
+    `com.typesafe.scala-logging_scala-logging`,
+    `ch.qos.logback_logback-classic`,
+    `com.h2database_h2` % Test
+  )
 )
   .enablePlugins(QuillRepositoryPlugin)
 
