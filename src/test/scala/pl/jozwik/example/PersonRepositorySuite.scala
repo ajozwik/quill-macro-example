@@ -9,7 +9,7 @@ import scala.util.Success
 
 trait PersonRepositorySuite extends AbstractQuillSpec {
 
-  private lazy val personRepository: PersonRepository = new PersonRepositoryGen(ctx, "Person")
+  private lazy val repository: PersonRepository = new PersonRepositoryGen(ctx, "Person")
 
   "Person uses fixed id " should {
     "Call all operations on Person" in {
@@ -18,19 +18,22 @@ trait PersonRepositorySuite extends AbstractQuillSpec {
       val person = Person(PersonId(1), "firstName", "lastName", today.minusYears(2), Option(addressId))
       val notExisting = Person(PersonId(2), "firstName", "lastName", today, Option(addressId))
       ctx.transaction {
-        personRepository.all shouldBe Success(Seq())
+        repository.all shouldBe Success(Seq())
         val addressIdTry = addressRepository.create(address)
         addressIdTry shouldBe 'success
         val id = addressIdTry.success.value
-        personRepository.create(person.copy(addressId = Option(id)), false) shouldBe 'success
+        val newPerson = person.copy(addressId = Option(id))
+        repository.createAndRead(newPerson, false) shouldBe Success(newPerson)
       }
-      personRepository.read(notExisting.id).success.value shouldBe empty
-      personRepository.read(person.id).success.value shouldBe Option(person)
-      personRepository.createOrUpdate(person) shouldBe 'success
-      personRepository.all shouldBe Success(Seq(person))
-      personRepository.youngerThan(person.birthDate.minusDays(1))(offset, limit) shouldBe Success(Seq(person))
-      personRepository.delete(person.id) shouldBe 'success
-      personRepository.all shouldBe Success(Seq())
+      repository.read(notExisting.id).success.value shouldBe empty
+      repository.read(person.id).success.value shouldBe Option(person)
+      repository.createOrUpdateAndRead(person) shouldBe Success(person)
+      repository.all shouldBe Success(Seq(person))
+      repository.youngerThan(person.birthDate.minusDays(1))(offset, limit) shouldBe Success(Seq(person))
+      repository.delete(person.id) shouldBe 'success
+      repository.all shouldBe Success(Seq())
+
+      repository.createAndRead(person) shouldBe 'failure
 
     }
   }

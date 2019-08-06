@@ -1,7 +1,7 @@
 import pl.jozwik.quillgeneric.sbt.RepositoryDescription
 import scalariform.formatter.preferences._
 
-val `scala_2.12` = "2.12.8"
+val `scala_2.12` = "2.12.9"
 
 resolvers += Resolver.sonatypeRepo("releases")
 

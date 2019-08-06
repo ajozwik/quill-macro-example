@@ -11,12 +11,13 @@ trait PersonRepositoryImplSuite extends AbstractQuillSpec {
 
   private lazy val repository: PersonRepository = new PersonRepositoryGen(ctx, "Person2")
 
-  "MyPersonRepository" should {
+  private val person = Person(PersonId.empty, "firstName", "lastName", today)
+
+  "PersonRepositoryImpl" should {
     "Call all operations on Person2 with auto generated id" in {
-      val person = Person(PersonId.empty, "firstName", "lastName", today)
 
       repository.all shouldBe Success(Seq())
-      val personId = repository.create(person, generateId) match {
+      val personId = repository.create(person) match {
         case Failure(th) =>
           logger.error("", th)
           fail(th.getMessage, th)
@@ -30,6 +31,13 @@ trait PersonRepositoryImplSuite extends AbstractQuillSpec {
       repository.delete(createdPatron.id) shouldBe 'success
       repository.read(createdPatron.id).success.value shouldBe empty
       repository.all shouldBe Success(Seq())
+    }
+
+    "Use create/update and read" in {
+      val person1 = repository.createAndRead(person).success.value
+      person1.id shouldNot be(person)
+      val person2 = repository.createOrUpdateAndRead(person1).success.value
+      person2 shouldBe person1
     }
   }
 }
