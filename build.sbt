@@ -1,4 +1,4 @@
-import pl.jozwik.quillgeneric.sbt.RepositoryDescription
+import pl.jozwik.quillgeneric.sbt._
 import scalariform.formatter.preferences._
 
 val `scala_2.12` = "2.12.9"
@@ -31,32 +31,44 @@ val `ch.qos.logback_logback-classic` = "ch.qos.logback" % "logback-classic" % "1
 
 val `com.h2database_h2` = "com.h2database" % "h2" % "1.4.199"
 
-val domainModelPackage = "pl.jozwik.example.domain.model"
-val implementationPackage = "pl.jozwik.example.impl"
+val basePackage = "pl.jozwik.example"
+val domainModelPackage = s"$basePackage.domain.model"
+val implementationPackage = s"$basePackage.impl"
 
 lazy val root = Project("quill-macro-example", file(".")).settings(
   generateDescription := Seq(
     RepositoryDescription(s"$domainModelPackage.Person",
-      s"$domainModelPackage.PersonId",
-      s"pl.jozwik.example.repository.PersonRepositoryGen",
+      BeanIdClass(s"$domainModelPackage.PersonId"),
+      s"$basePackage.repository.PersonRepositoryGen",
       true,
       Option(s"$implementationPackage.PersonRepositoryImpl[Dialect, Naming]"),
       None),
     RepositoryDescription(s"$domainModelPackage.Address",
-      s"$domainModelPackage.AddressId",
-      "pl.jozwik.example.repository.AddressRepositoryGen",
+      BeanIdClass(s"$domainModelPackage.AddressId"),
+      s"$basePackage.repository.AddressRepositoryGen",
       true,
       Option(s"$implementationPackage.AddressRepositoryImpl[Dialect, Naming]"),
       None,
       Map("city" -> "city")),
     RepositoryDescription(s"$domainModelPackage.Configuration",
-      s"$domainModelPackage.ConfigurationId",
-      "pl.jozwik.example.ConfigurationRepositoryGen",
+      BeanIdClass(s"$domainModelPackage.ConfigurationId"),
+      s"$basePackage.ConfigurationRepositoryGen",
       false,
       None,
       None,
       Map("id" -> "key")
-    )
+    ),
+    RepositoryDescription(s"$domainModelPackage.Sale",
+      BeanIdClass(s"$domainModelPackage.SaleId", KeyType.Composite),
+      s"$basePackage.repository.SaleRepositoryGen",
+      false,
+      None,
+      None,
+      Map("id.fk1" -> "productId", "id.fk2" -> "personId")),
+    RepositoryDescription(s"$domainModelPackage.Product",
+      BeanIdClass(s"$domainModelPackage.ProductId"),
+      s"$basePackage.repository.ProductRepositoryGen",
+      true)
   ),
   scalariformPreferences := scalariformPreferences.value
     .setPreference(AlignSingleLineCaseStatements, true)
