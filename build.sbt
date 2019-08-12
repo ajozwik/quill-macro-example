@@ -68,7 +68,14 @@ lazy val root = Project("quill-macro-example", file(".")).settings(
     RepositoryDescription(s"$domainModelPackage.Product",
       BeanIdClass(s"$domainModelPackage.ProductId"),
       s"$basePackage.repository.ProductRepositoryGen",
-      true)
+      true),
+    RepositoryDescription(s"$domainModelPackage.Cell4d",
+      BeanIdClass(s"$domainModelPackage.Cell4dId", KeyType.Composite),
+      s"$basePackage.repository.Cell4dRepositoryGen",
+      false,
+      None,
+      None,
+      Map("id.fk1" -> "x", "id.fk2" -> "y", "id.fk3" -> "z", "id.fk4" -> "t"))
   ),
   scalariformPreferences := scalariformPreferences.value
     .setPreference(AlignSingleLineCaseStatements, true)

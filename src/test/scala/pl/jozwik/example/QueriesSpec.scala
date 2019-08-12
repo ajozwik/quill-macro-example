@@ -5,3 +5,4 @@ class QueriesSpec extends PersonRepositorySuite
   with ConfigurationSuite
   with AddressSuite
   with SaleRepositorySuite
+  with Cell4dSuite

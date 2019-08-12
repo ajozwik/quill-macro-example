@@ -8,7 +8,7 @@ import scala.util.Success
 
 trait SaleRepositorySuite extends AbstractQuillSpec {
 
-  private val repository = new SaleRepositoryGen(compositeCtx, "Sale")
+  private val repository = new SaleRepositoryGen(ctx, "Sale")
   private val personRepository = new PersonRepositoryGen(ctx, "Person2")
   private val productRepository = new ProductRepositoryGen(ctx, "Product")
   "Sale Repository " should {
@@ -20,9 +20,14 @@ trait SaleRepositorySuite extends AbstractQuillSpec {
       val product = productRepository.createAndRead(productWithoutId).success.get
       val saleId = SaleId(product.id, person.id)
       val sale = Sale(saleId, now)
-      repository.createAndRead(sale) shouldBe 'success
+      repository.createAndRead(sale).success.get shouldBe sale
+
+      repository.createOrUpdateAndRead(sale) shouldBe 'success
 
       repository.read(saleId).success.get shouldBe Option(sale)
+      repository.delete(saleId) shouldBe 'success
+      productRepository.delete(product.id)
+      personRepository.delete(person.id)
     }
   }
 
