@@ -11,22 +11,22 @@ trait ConfigurationSuite extends AbstractQuillSpec {
   private lazy val repository: Repository[ConfigurationId, Configuration] = new ConfigurationRepositoryGen(ctx)
 
   "Configuration " should {
-    "Call all operation " in {
-      logger.debug("configuration")
-      val entity = Configuration(ConfigurationId("firstName"), "lastName")
-      repository.all shouldBe Try(Seq())
-      val entityId = repository.create(entity)
-      val entityIdProvided = entityId.success.value
-      val createdEntity = repository.read(entityIdProvided).success.value.getOrElse(fail())
-      repository.update(createdEntity) shouldBe 'success
-      repository.all shouldBe Success(Seq(createdEntity))
-      val newValue = "newValue"
-      val modified = createdEntity.copy(value = newValue)
-      repository.update(modified) shouldBe 'success
-      repository.read(createdEntity.id).success.value.map(_.value) shouldBe Option(newValue)
-      repository.delete(createdEntity.id) shouldBe 'success
-      repository.read(createdEntity.id).success.value shouldBe empty
-      repository.all shouldBe Try(Seq())
+      "Call all operation " in {
+        logger.debug("configuration")
+        val entity = Configuration(ConfigurationId("firstName"), "lastName")
+        repository.all shouldBe Try(Seq())
+        val entityId         = repository.create(entity)
+        val entityIdProvided = entityId.success.value
+        val createdEntity    = repository.read(entityIdProvided).success.value.getOrElse(fail())
+        repository.update(createdEntity) shouldBe 'success
+        repository.all shouldBe Success(Seq(createdEntity))
+        val newValue = "newValue"
+        val modified = createdEntity.copy(value = newValue)
+        repository.update(modified) shouldBe 'success
+        repository.read(createdEntity.id).success.value.map(_.value) shouldBe Option(newValue)
+        repository.delete(createdEntity.id) shouldBe 'success
+        repository.read(createdEntity.id).success.value shouldBe empty
+        repository.all shouldBe Try(Seq())
+      }
     }
-  }
 }

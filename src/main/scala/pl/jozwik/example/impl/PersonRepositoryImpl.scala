@@ -16,8 +16,7 @@ trait PersonRepositoryImpl[Dialect <: SqlIdiom, Naming <: NamingStrategy]
 
   def searchByFirstName(name: String)(offset: Int, limit: Int): Try[Seq[Person]] = {
     import context._
-    searchByFilter((p: Person) =>
-      p.firstName == lift(name) && p.lastName != lift(""))(offset, limit)(dynamicSchema)
+    searchByFilter((p: Person) => p.firstName == lift(name) && p.lastName != lift(""))(offset, limit)(dynamicSchema)
   }
 
   def maxBirthDate: Try[Option[LocalDate]] = Try {
@@ -31,8 +30,7 @@ trait PersonRepositoryImpl[Dialect <: SqlIdiom, Naming <: NamingStrategy]
     searchByFilter((p: Person) => quote(p.birthDate > lift(date)))(offset, limit)(dynamicSchema)
   }
 
-  def count: Try[Long] = {
+  def count: Try[Long] =
     context.count((_: Person) => true)(dynamicSchema)
-  }
 
 }

@@ -1,9 +1,10 @@
 import pl.jozwik.quillgeneric.sbt._
-import scalariform.formatter.preferences._
 
-val `scala_2.12` = "2.12.9"
+val `scalaVersion_2.12` = "2.12.9"
 
 resolvers += Resolver.sonatypeRepo("releases")
+
+ThisBuild / scalaVersion := `scalaVersion_2.12`
 
 ThisBuild / scapegoatVersion := "1.3.9"
 
@@ -77,10 +78,6 @@ lazy val root = Project("quill-macro-example", file(".")).settings(
       None,
       Map("id.fk1" -> "x", "id.fk2" -> "y", "id.fk3" -> "z", "id.fk4" -> "t"))
   ),
-  scalariformPreferences := scalariformPreferences.value
-    .setPreference(AlignSingleLineCaseStatements, true)
-    .setPreference(DoubleIndentConstructorArguments, true)
-    .setPreference(DanglingCloseParenthesis, Preserve),
   libraryDependencies ++= Seq(
     `org.scalatest_scalatest`,
     `org.scalacheck_scalacheck`,
