@@ -163,6 +163,7 @@ lazy val monix = projectWithName("monix", file("monix"))
         )
   )
   .dependsOn(common, common % "test -> test")
+  .enablePlugins(QuillRepositoryPlugin)
 
 def projectWithName(name: String, file: File): Project =
   Project(name, file)
@@ -178,4 +179,3 @@ def projectWithName(name: String, file: File): Project =
       licenseSelection := Seq(LicenseCategory.MIT),
       sources in (Compile, doc) := Seq.empty
     )
-    .enablePlugins(QuillRepositoryPlugin)
