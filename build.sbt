@@ -2,6 +2,8 @@ import pl.jozwik.quillgeneric.sbt._
 
 val `scalaVersion_2.12` = "2.12.9"
 
+name := "quill-macro-example"
+
 resolvers += Resolver.sonatypeRepo("releases")
 
 resolvers += Resolver.sonatypeRepo("snapshots")
@@ -37,15 +39,12 @@ val `com.h2database_h2` = "com.h2database" % "h2" % "1.4.199"
 val basePackage        = "pl.jozwik.example"
 val domainModelPackage = s"$basePackage.domain.model"
 
+lazy val common = projectWithName("common", file("common"))
+
 val generateRepositoryPackage = s"$basePackage.repository"
-val repositoryPackage         = s"$basePackage.impl"
+val repositoryPackage         = s"$basePackage.sync.impl"
 
-val monixPackage           = s"$basePackage.monix"
-val monixRepositoryPackage = s"$monixPackage.impl"
-
-val generateMonixRepositoryPackage = s"$monixPackage.repository"
-
-lazy val root = Project("quill-macro-example", file("."))
+lazy val sync = projectWithName("sync", file("sync"))
   .settings(
     generateDescription := Seq(
           RepositoryDescription(
@@ -98,7 +97,17 @@ lazy val root = Project("quill-macro-example", file("."))
             None,
             Map("id.fk1" -> "productId", "id.fk2" -> "personId")
           )
-        ),
+        )
+  )
+  .enablePlugins(QuillRepositoryPlugin)
+  .dependsOn(common, common % "test -> test")
+
+val monixPackage                   = s"$basePackage.monix"
+val monixRepositoryPackage         = s"$monixPackage.impl"
+val generateMonixRepositoryPackage = s"$monixPackage.repository"
+
+lazy val monix = projectWithName("monix", file("monix"))
+  .settings(
     generateMonixRepositories ++= Seq(
           RepositoryDescription(
             s"$domainModelPackage.Address",
@@ -151,13 +160,22 @@ lazy val root = Project("quill-macro-example", file("."))
             None,
             Map("id.fk1" -> "productId", "id.fk2" -> "personId")
           )
-        ),
-    libraryDependencies ++= Seq(
-          `org.scalatest_scalatest`,
-          `org.scalacheck_scalacheck`,
-          `com.typesafe.scala-logging_scala-logging`,
-          `ch.qos.logback_logback-classic`,
-          `com.h2database_h2` % Test
         )
   )
-  .enablePlugins(QuillRepositoryPlugin)
+  .dependsOn(common, common % "test -> test")
+
+def projectWithName(name: String, file: File): Project =
+  Project(name, file)
+    .settings(
+      libraryDependencies ++= Seq(
+            `org.scalatest_scalatest`,
+            `org.scalacheck_scalacheck`,
+            `com.typesafe.scala-logging_scala-logging`,
+            `ch.qos.logback_logback-classic`,
+            `com.h2database_h2` % Test
+          ),
+      licenseReportTitle := "Copyright (c) 2019 Andrzej Jozwik",
+      licenseSelection := Seq(LicenseCategory.MIT),
+      sources in (Compile, doc) := Seq.empty
+    )
+    .enablePlugins(QuillRepositoryPlugin)

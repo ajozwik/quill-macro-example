@@ -55,7 +55,7 @@ import pl.jozwik.quillgeneric.sbt.RepositoryDescription
 - define variables (optional)
 ```
 val domainModelPackage = "pl.jozwik.example.domain.model"
-val implementationPackage = "pl.jozwik.example.impl"
+val implementationPackage = "pl.jozwik.example.sync.impl"
 ```
 
 - add settings (to build.sbt):
@@ -79,7 +79,7 @@ val implementationPackage = "pl.jozwik.example.impl"
 Create your implementation (optional) use the same as `s"$implementationPackage.PersonRepositoryImpl[Dialect, Naming]"` in settings section:
 
 ```
-package pl.jozwik.example.impl
+package pl.jozwik.example.sync.impl
 
 import java.time.LocalDate
 
