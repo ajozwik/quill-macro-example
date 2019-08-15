@@ -1,13 +1,15 @@
-package pl.jozwik.example
+package pl.jozwik.example.sync
 
 import pl.jozwik.example.domain.model.{ Address, AddressId }
+import org.scalatest.TryValues._
 
-trait AddressSuite extends AbstractQuillSpec {
+trait AddressSuite extends AbstractSyncSpec {
   "Address " should {
       "Batch update address " in {
         val address = Address(AddressId.empty, "Spain", "Warszawa", Option("Podbipiety"))
-        addressRepository.create(address) shouldBe 'success
+        val id      = addressRepository.create(address).success.get
         addressRepository.setCountryIfCity("Warszawa", "Poland") shouldBe 'success
+        addressRepository.delete(id)
       }
     }
 }

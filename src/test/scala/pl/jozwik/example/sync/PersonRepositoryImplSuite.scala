@@ -1,15 +1,16 @@
-package pl.jozwik.example
+package pl.jozwik.example.sync
 
-import org.scalatest.TryValues._
 import pl.jozwik.example.domain.model.{ Person, PersonId }
 import pl.jozwik.example.domain.repository.PersonRepository
 import pl.jozwik.example.repository.PersonRepositoryGen
+import pl.jozwik.quillgeneric.quillmacro.sync.WithSync
 
 import scala.util.{ Failure, Success }
+import org.scalatest.TryValues._
 
-trait PersonRepositoryImplSuite extends AbstractQuillSpec {
+trait PersonRepositoryImplSuite extends AbstractSyncSpec {
 
-  private lazy val repository: PersonRepository = new PersonRepositoryGen(ctx, "Person2")
+  private lazy val repository: PersonRepository with WithSync = new PersonRepositoryGen(ctx, "Person2")
 
   private val person = Person(PersonId.empty, "firstName", "lastName", today)
 

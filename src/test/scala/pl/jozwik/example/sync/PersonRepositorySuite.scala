@@ -1,15 +1,13 @@
-package pl.jozwik.example
+package pl.jozwik.example.sync
 
-import org.scalatest.TryValues._
 import pl.jozwik.example.domain.model.{ Address, Person, PersonId }
-import pl.jozwik.example.domain.repository.PersonRepository
 import pl.jozwik.example.repository.PersonRepositoryGen
-
+import org.scalatest.TryValues._
 import scala.util.Success
 
-trait PersonRepositorySuite extends AbstractQuillSpec {
+trait PersonRepositorySuite extends AbstractSyncSpec {
 
-  private lazy val repository: PersonRepository = new PersonRepositoryGen(ctx, "Person")
+  private lazy val repository = new PersonRepositoryGen(ctx, "Person")
 
   "Person uses fixed id " should {
       "Call all operations on Person" in {

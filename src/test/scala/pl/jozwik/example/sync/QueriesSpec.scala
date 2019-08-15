@@ -1,4 +1,4 @@
-package pl.jozwik.example
+package pl.jozwik.example.sync
 
 class QueriesSpec
   extends PersonRepositorySuite

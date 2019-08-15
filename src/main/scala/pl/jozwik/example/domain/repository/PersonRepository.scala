@@ -3,18 +3,16 @@ package pl.jozwik.example.domain.repository
 import java.time.LocalDate
 
 import pl.jozwik.example.domain.model.{ Person, PersonId }
-import pl.jozwik.quillgeneric.quillmacro.sync.RepositoryWithGeneratedId
-
-import scala.util.Try
+import pl.jozwik.quillgeneric.quillmacro.RepositoryWithGeneratedId
 
 trait PersonRepository extends RepositoryWithGeneratedId[PersonId, Person] {
 
-  def count: Try[Long]
+  def count: F[Long]
 
-  def searchByFirstName(name: String)(offset: Int, limit: Int): Try[Seq[Person]]
+  def searchByFirstName(name: String)(offset: Int, limit: Int): F[Seq[Person]]
 
-  def maxBirthDate: Try[Option[LocalDate]]
+  def maxBirthDate: F[Option[LocalDate]]
 
-  def youngerThan(date: LocalDate)(offset: Int, limit: Int): Try[Seq[Person]]
+  def youngerThan(date: LocalDate)(offset: Int, limit: Int): F[Seq[Person]]
 
 }

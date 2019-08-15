@@ -1,20 +1,19 @@
-package pl.jozwik.example.impl
+package pl.jozwik.example.monix.impl
 
 import java.time.LocalDateTime
 
 import io.getquill.NamingStrategy
 import io.getquill.context.sql.idiom.SqlIdiom
+import monix.eval.Task
 import pl.jozwik.example.domain.model.{ Address, AddressId }
 import pl.jozwik.example.domain.repository.AddressRepository
-import pl.jozwik.quillgeneric.quillmacro.sync.JdbcRepositoryWithGeneratedId
-
-import scala.util.Try
+import pl.jozwik.quillgeneric.quillmacro.monix.JdbcMonixRepositoryWithGeneratedId
 
 trait AddressRepositoryImpl[Dialect <: SqlIdiom, Naming <: NamingStrategy]
-  extends JdbcRepositoryWithGeneratedId[AddressId, Address, Dialect, Naming]
+  extends JdbcMonixRepositoryWithGeneratedId[AddressId, Address, Dialect, Naming]
   with AddressRepository {
 
-  def setCountryIfCity(city: String, country: String): Try[Long] = Try {
+  def setCountryIfCity(city: String, country: String): Task[Long] = {
     import context._
     val now = LocalDateTime.now
     val q = dynamicSchema

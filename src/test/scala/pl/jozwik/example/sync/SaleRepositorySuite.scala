@@ -1,12 +1,11 @@
-package pl.jozwik.example
+package pl.jozwik.example.sync
 
-import org.scalatest.TryValues._
-import pl.jozwik.example.domain.model.{ Person, PersonId, Product, ProductId, Sale, SaleId }
+import pl.jozwik.example.domain.model._
 import pl.jozwik.example.repository.{ PersonRepositoryGen, ProductRepositoryGen, SaleRepositoryGen }
-
+import org.scalatest.TryValues._
 import scala.util.Success
 
-trait SaleRepositorySuite extends AbstractQuillSpec {
+trait SaleRepositorySuite extends AbstractSyncSpec {
 
   private val repository        = new SaleRepositoryGen(ctx, "Sale")
   private val personRepository  = new PersonRepositoryGen(ctx, "Person2")

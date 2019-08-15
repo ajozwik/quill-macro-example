@@ -1,14 +1,15 @@
-package pl.jozwik.example
+package pl.jozwik.example.sync
 
-import org.scalatest.TryValues._
+import pl.jozwik.example.ConfigurationRepositoryGen
 import pl.jozwik.example.domain.model.{ Configuration, ConfigurationId }
-import pl.jozwik.quillgeneric.quillmacro.sync.Repository
+import pl.jozwik.quillgeneric.quillmacro.sync.SyncRepository
 
 import scala.util.{ Success, Try }
+import org.scalatest.TryValues._
 
-trait ConfigurationSuite extends AbstractQuillSpec {
+trait ConfigurationSuite extends AbstractSyncSpec {
 
-  private lazy val repository: Repository[ConfigurationId, Configuration] = new ConfigurationRepositoryGen(ctx)
+  private lazy val repository: SyncRepository[ConfigurationId, Configuration] = new ConfigurationRepositoryGen(ctx)
 
   "Configuration " should {
       "Call all operation " in {
