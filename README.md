@@ -7,15 +7,40 @@ Example of usage [sbt-quill-crud-generic](https://github.com/ajozwik/sbt-quill-c
 - create model classes (must be visible during compilation)
 
 ```
-package pl.jozwik.example.model
+package pl.jozwik.example.domain.model
 
 import java.time.LocalDate
 
 import pl.jozwik.quillgeneric.quillmacro.WithId
 
+object PersonId {
+  val empty: PersonId = PersonId(0)
+}
+
 final case class PersonId(value: Int) extends AnyVal
 
-final case class Person(id: PersonId, firstName: String, lastName: String, birthDate: LocalDate) extends WithId[PersonId]
+final case class Person(
+    id: PersonId,
+    firstName: String,
+    lastName: String,
+    birthDate: LocalDate,
+    addressId: Option[AddressId] = None) extends WithId[PersonId]
+
+object AddressId {
+  val empty: AddressId = AddressId(0)
+}
+
+final case class AddressId(value: Int) extends AnyVal
+
+final case class Address(
+    id: AddressId,
+    country: String,
+    city: String,
+    street: Option[String] = None,
+    buildingNumber: Option[String] = None,
+    updated: Option[LocalDateTime] = None,
+    localNumber: Option[String] = None) extends WithId[AddressId]
+
 ```
 
 - add plugin (project/plugins.sbt)
@@ -26,41 +51,96 @@ addSbtPlugin("com.github.ajozwik" % "sbt-quill-crud-generic" % "<version>")
 - add imports (to build.sbt):
 ```
 import pl.jozwik.quillgeneric.sbt.RepositoryDescription
-import pl.jozwik.quillgeneric.sbt.QuillRepositoryPlugin._
 ```
+- define variables (optional)
+```
+val domainModelPackage = "pl.jozwik.example.domain.model"
+val implementationPackage = "pl.jozwik.example.sync.impl"
+```
+
 - add settings (to build.sbt):
 ```
-  generateDescription := Seq(
-    RepositoryDescription("pl.jozwik.example.model.Person",
-    "pl.jozwik.example.model.PersonId",
-    "pl.jozwik.example.repository.PersonRepository",
-    true,
-    Option("pl.jozwik.example.repository.MyPersonRepository[Dialect, Naming]")),
-    RepositoryDescription("pl.jozwik.example.model.Address",
-      "pl.jozwik.example.model.AddressId",
-      "pl.jozwik.example.repository.AddressRepository")
-      )
+    generateDescription := Seq(
+      RepositoryDescription(s"$domainModelPackage.Person",
+        s"$domainModelPackage.PersonId",
+        s"pl.jozwik.example.repository.PersonRepositoryGen",
+        true,
+        Option(s"$implementationPackage.PersonRepositoryImpl[Dialect, Naming]"),
+        None),
+      RepositoryDescription(s"$domainModelPackage.Address",
+        s"$domainModelPackage.AddressId",
+        "pl.jozwik.example.repository.AddressRepositoryGen",
+        true,
+        Option(s"$implementationPackage.AddressRepositoryImpl[Dialect, Naming]"),
+        None,
+        Map("city" -> "city"))
 ```
 
-For simpler inject support (guice/spring) you can use own trait
+Create your implementation (optional) use the same as `s"$implementationPackage.PersonRepositoryImpl[Dialect, Naming]"` in settings section:
 
 ```
-package pl.jozwik.example.repository
+package pl.jozwik.example.sync.impl
 
 import java.time.LocalDate
 
 import io.getquill.NamingStrategy
 import io.getquill.context.sql.idiom.SqlIdiom
-import pl.jozwik.quillgeneric.quillmacro.sync.JdbcRepository
-import pl.jozwik.quillgeneric.sbt.model.{ Person, PersonId }
+import pl.jozwik.example.domain.model.{ Person, PersonId }
+import pl.jozwik.example.domain.repository.PersonRepository
+import pl.jozwik.quillgeneric.quillmacro.sync.JdbcRepositoryWithGeneratedId
 
-trait MyPersonRepository[Dialect <: SqlIdiom, Naming <: NamingStrategy]
-  extends JdbcRepository[PersonId, Person, Dialect, Naming] {
-  def max: Option[LocalDate] = {
+import scala.util.Try
+
+trait PersonRepositoryImpl[Dialect <: SqlIdiom, Naming <: NamingStrategy]
+  extends JdbcRepositoryWithGeneratedId[PersonId, Person, Dialect, Naming]
+  with PersonRepository {
+
+  def searchByFirstName(name: String)(offset: Int, limit: Int): Try[Seq[Person]] = {
+    import context._
+    searchByFilter((p: Person) =>
+      p.firstName == lift(name) && p.lastName != lift(""))(offset, limit)(dynamicSchema)
+  }
+
+  def maxBirthDate: Try[Option[LocalDate]] = Try {
     import context._
     val r = dynamicSchema.map(p => p.birthDate)
-    context.run(r.max)
+    run(r.max)
   }
+
+  def youngerThan(date: LocalDate)(offset: Int, limit: Int): Try[Seq[Person]] = {
+    import context._
+    searchByFilter((p: Person) => quote(p.birthDate > lift(date)))(offset, limit)(dynamicSchema)
+  }
+
+  def count: Try[Long] = {
+    context.count((_: Person) => true)(dynamicSchema)
+  }
+
+}
+```
+
+- and domain trait 
+
+```
+package pl.jozwik.example.domain.repository
+
+import java.time.LocalDate
+
+import pl.jozwik.example.domain.model.{Person, PersonId}
+import pl.jozwik.quillgeneric.quillmacro.sync.RepositoryWithGeneratedId
+
+import scala.util.Try
+
+trait PersonRepository extends RepositoryWithGeneratedId[PersonId, Person] {
+
+  def count: Try[Long]
+
+  def searchByFirstName(name: String)(offset: Int, limit: Int): Try[Seq[Person]]
+
+  def maxBirthDate: Try[Option[LocalDate]]
+
+  def youngerThan(date: LocalDate)(offset: Int, limit: Int): Try[Seq[Person]]
+
 }
 ```
 
