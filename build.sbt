@@ -39,7 +39,17 @@ val `com.h2database_h2` = "com.h2database" % "h2" % "1.4.199"
 val basePackage        = "pl.jozwik.example"
 val domainModelPackage = s"$basePackage.domain.model"
 
+lazy val readQuillMacroVersionSbt = {
+  val source        = scala.io.Source.fromFile(new java.io.File("project", "plugins.sbt"))
+  val lineIterator  = source.getLines()
+  val line          = lineIterator.find(line => line.contains("quillMacroVersion")).getOrElse("""val quillMacroVersion = "0.7.1" """)
+  val versionString = line.split("=")(1).trim
+  source.close()
+  versionString.replace("\"", "")
+}
+
 lazy val common = projectWithName("common", file("common"))
+  .settings(libraryDependencies ++= Seq("com.github.ajozwik" %% "macro-quill" % readQuillMacroVersionSbt))
 
 val generateRepositoryPackage = s"$basePackage.repository"
 val repositoryPackage         = s"$basePackage.sync.impl"
