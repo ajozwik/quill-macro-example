@@ -36,6 +36,10 @@ val `ch.qos.logback_logback-classic` = "ch.qos.logback" % "logback-classic" % "1
 
 val `com.h2database_h2` = "com.h2database" % "h2" % "1.4.199"
 
+val `org.cassandraunit_cassandra-unit` = "org.cassandraunit" % "cassandra-unit" % "3.11.2.0"
+
+val `com.datastax.cassandra_cassandra-driver-extras` = "com.datastax.cassandra" % "cassandra-driver-extras" % "3.7.2"
+
 val basePackage        = "pl.jozwik.example"
 val domainModelPackage = s"$basePackage.domain.model"
 
@@ -54,7 +58,7 @@ lazy val common = projectWithName("common", file("common"))
 val generateRepositoryPackage = s"$basePackage.repository"
 val repositoryPackage         = s"$basePackage.sync.impl"
 
-lazy val sync = projectWithName("sync", file("sync"))
+lazy val sync = projectWithSbtPlugin("sync", file("sync"))
   .settings(
     generateDescription := Seq(
           RepositoryDescription(
@@ -109,14 +113,12 @@ lazy val sync = projectWithName("sync", file("sync"))
           )
         )
   )
-  .enablePlugins(QuillRepositoryPlugin)
-  .dependsOn(common, common % "test -> test")
 
 val monixPackage                   = s"$basePackage.monix"
 val monixRepositoryPackage         = s"$monixPackage.impl"
 val generateMonixRepositoryPackage = s"$monixPackage.repository"
 
-lazy val monix = projectWithName("monix", file("monix"))
+lazy val monix = projectWithSbtPlugin("monix", file("monix"))
   .settings(
     generateMonixRepositories ++= Seq(
           RepositoryDescription(
@@ -172,8 +174,47 @@ lazy val monix = projectWithName("monix", file("monix"))
           )
         )
   )
-  .dependsOn(common, common % "test -> test")
-  .enablePlugins(QuillRepositoryPlugin)
+
+val cassandraPackage                   = s"$basePackage.cassandra"
+val cassandraModelPackage              = s"$cassandraPackage.model"
+val generateCassandraRepositoryPackage = s"$cassandraPackage.sync.repository"
+
+lazy val cassandra = projectWithCassandra("cassandra", file("cassandra"))
+  .settings(
+    generateCassandraSyncRepositories ++= Seq(
+          RepositoryDescription(
+            s"$cassandraModelPackage.Address",
+            BeanIdClass(s"$cassandraModelPackage.AddressId"),
+            s"$generateCassandraRepositoryPackage.AddressRepositoryGen"
+          )
+        )
+  )
+
+val generateCassandraMonixRepositoryPackage = s"$cassandraPackage.monix.repository"
+
+lazy val cassandraMonix = projectWithCassandra("cassandra-monix", file("cassandra-monix"))
+  .settings(
+    generateCassandraMonixRepositories ++= Seq(
+          RepositoryDescription(
+            s"$cassandraModelPackage.Address",
+            BeanIdClass(s"$cassandraModelPackage.AddressId"),
+            s"$generateCassandraMonixRepositoryPackage.AddressRepositoryGen"
+          )
+        )
+  )
+  .dependsOn(cassandra, cassandra % "test -> test")
+
+def projectWithCassandra(name: String, file: File): Project =
+  projectWithSbtPlugin(name, file)
+    .settings(
+      Test / fork := true,
+      libraryDependencies ++= Seq(`org.cassandraunit_cassandra-unit` % Test, `com.datastax.cassandra_cassandra-driver-extras` % Test)
+    )
+
+def projectWithSbtPlugin(name: String, file: File): Project =
+  projectWithName(name, file)
+    .dependsOn(common, common % "test -> test")
+    .enablePlugins(QuillRepositoryPlugin)
 
 def projectWithName(name: String, file: File): Project =
   Project(name, file)
