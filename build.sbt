@@ -46,7 +46,7 @@ val domainModelPackage = s"$basePackage.domain.model"
 lazy val readQuillMacroVersionSbt = {
   val source        = scala.io.Source.fromFile(new java.io.File("project", "plugins.sbt"))
   val lineIterator  = source.getLines()
-  val line          = lineIterator.find(line => line.contains("quillMacroVersion")).getOrElse("""val quillMacroVersion = "0.7.1" """)
+  val line          = lineIterator.find(line => line.contains("quillMacroVersion")).getOrElse("""val quillMacroVersion = "0.8.1" """)
   val versionString = line.split("=")(1).trim
   source.close()
   versionString.replace("\"", "")
@@ -175,9 +175,10 @@ lazy val monix = projectWithSbtPlugin("monix", file("monix"))
         )
   )
 
-val cassandraPackage                   = s"$basePackage.cassandra"
-val cassandraModelPackage              = s"$cassandraPackage.model"
-val generateCassandraRepositoryPackage = s"$cassandraPackage.sync.repository"
+val cassandraPackage                        = s"$basePackage.cassandra"
+val cassandraModelPackage                   = s"$cassandraPackage.model"
+val generateCassandraRepositoryPackage      = s"$cassandraPackage.sync.repository"
+val generateCassandraAsyncRepositoryPackage = s"$cassandraPackage.async.repository"
 
 lazy val cassandra = projectWithCassandra("cassandra", file("cassandra"))
   .settings(
@@ -187,7 +188,15 @@ lazy val cassandra = projectWithCassandra("cassandra", file("cassandra"))
             BeanIdClass(s"$cassandraModelPackage.AddressId"),
             s"$generateCassandraRepositoryPackage.AddressRepositoryGen"
           )
-        )
+        ),
+    generateCassandraAsyncRepositories ++= Seq(
+          RepositoryDescription(
+            s"$cassandraModelPackage.Address",
+            BeanIdClass(s"$cassandraModelPackage.AddressId"),
+            s"$generateCassandraAsyncRepositoryPackage.AddressRepositoryGen"
+          )
+        ),
+    parallelExecution in Test := false
   )
 
 val generateCassandraMonixRepositoryPackage = s"$cassandraPackage.monix.repository"
