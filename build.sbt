@@ -109,7 +109,7 @@ lazy val sync = projectWithSbtPlugin("sync", file("sync"))
             false,
             None,
             None,
-            Map("id.fk1" -> "productId", "id.fk2" -> "personId")
+            Map("id.fk1" -> "PRODUCT_ID", "id.fk2" -> "PERSON_ID")
           )
         )
   )
@@ -170,7 +170,7 @@ lazy val monix = projectWithSbtPlugin("monix", file("monix"))
             false,
             None,
             None,
-            Map("id.fk1" -> "productId", "id.fk2" -> "personId")
+            Map("id.fk1" -> "PRODUCT_ID", "id.fk2" -> "PERSON_ID")
           )
         )
   )
