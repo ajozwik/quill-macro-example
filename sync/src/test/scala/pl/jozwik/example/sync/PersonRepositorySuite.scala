@@ -18,7 +18,7 @@ trait PersonRepositorySuite extends AbstractSyncSpec {
         ctx.transaction {
           repository.all shouldBe Success(Seq())
           val addressIdTry = addressRepository.create(address)
-          addressIdTry shouldBe 'success
+          addressIdTry shouldBe Symbol("success")
           val id        = addressIdTry.success.value
           val newPerson = person.copy(addressId = Option(id))
           repository.createAndRead(newPerson, false) shouldBe Success(newPerson)
@@ -28,10 +28,10 @@ trait PersonRepositorySuite extends AbstractSyncSpec {
         repository.createOrUpdateAndRead(person) shouldBe Success(person)
         repository.all shouldBe Success(Seq(person))
         repository.youngerThan(person.birthDate.minusDays(1))(offset, limit) shouldBe Success(Seq(person))
-        repository.delete(person.id) shouldBe 'success
+        repository.delete(person.id) shouldBe Symbol("success")
         repository.all shouldBe Success(Seq())
 
-        repository.createAndRead(person) shouldBe 'failure
+        repository.createAndRead(person) shouldBe Symbol("failure")
 
       }
     }

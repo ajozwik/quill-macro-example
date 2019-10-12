@@ -1,8 +1,8 @@
 resolvers += Resolver.sonatypeRepo("releases")
 
-addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.0.3")
+addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.0.6")
 
-val quillMacroVersion = "0.8.8.1"
+val quillMacroVersion = "0.8.8.2"
 
 addSbtPlugin("com.github.ajozwik" % "sbt-quill-crud-generic" % quillMacroVersion)
 

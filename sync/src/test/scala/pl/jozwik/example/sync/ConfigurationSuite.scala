@@ -19,13 +19,13 @@ trait ConfigurationSuite extends AbstractSyncSpec {
         val entityId         = repository.create(entity)
         val entityIdProvided = entityId.success.value
         val createdEntity    = repository.read(entityIdProvided).success.value.getOrElse(fail())
-        repository.update(createdEntity) shouldBe 'success
+        repository.update(createdEntity) shouldBe Symbol("success")
         repository.all shouldBe Success(Seq(createdEntity))
         val newValue = "newValue"
         val modified = createdEntity.copy(value = newValue)
-        repository.update(modified) shouldBe 'success
+        repository.update(modified) shouldBe Symbol("success")
         repository.read(createdEntity.id).success.value.map(_.value) shouldBe Option(newValue)
-        repository.delete(createdEntity.id) shouldBe 'success
+        repository.delete(createdEntity.id) shouldBe Symbol("success")
         repository.read(createdEntity.id).success.value shouldBe empty
         repository.all shouldBe Try(Seq())
       }

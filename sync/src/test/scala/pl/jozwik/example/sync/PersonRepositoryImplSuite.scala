@@ -26,10 +26,10 @@ trait PersonRepositoryImplSuite extends AbstractSyncSpec {
             value
         }
         val createdPatron = repository.read(personId).success.value.getOrElse(fail())
-        repository.update(createdPatron) shouldBe 'success
+        repository.update(createdPatron) shouldBe Symbol("success")
         repository.all shouldBe Success(Seq(createdPatron))
 
-        repository.delete(createdPatron.id) shouldBe 'success
+        repository.delete(createdPatron.id) shouldBe Symbol("success")
         repository.read(createdPatron.id).success.value shouldBe empty
         repository.all shouldBe Success(Seq())
       }

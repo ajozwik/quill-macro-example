@@ -8,7 +8,7 @@ trait AddressSuite extends AbstractSyncSpec {
       "Batch update address " in {
         val address = Address(AddressId.empty, "Spain", "Warszawa", Option("Podbipiety"))
         val id      = addressRepository.create(address).success.get
-        addressRepository.setCountryIfCity("Warszawa", "Poland") shouldBe 'success
+        addressRepository.setCountryIfCity("Warszawa", "Poland") shouldBe Symbol("success")
         addressRepository.delete(id)
       }
     }

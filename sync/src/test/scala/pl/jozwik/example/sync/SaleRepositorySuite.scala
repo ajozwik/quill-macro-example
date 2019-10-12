@@ -21,10 +21,10 @@ trait SaleRepositorySuite extends AbstractSyncSpec {
         val sale             = Sale(saleId, now)
         repository.createAndRead(sale).success.get shouldBe sale
 
-        repository.createOrUpdateAndRead(sale) shouldBe 'success
+        repository.createOrUpdateAndRead(sale) shouldBe Symbol("success")
 
         repository.read(saleId).success.get shouldBe Option(sale)
-        repository.delete(saleId) shouldBe 'success
+        repository.delete(saleId) shouldBe Symbol("success")
         productRepository.delete(product.id)
         personRepository.delete(person.id)
       }
