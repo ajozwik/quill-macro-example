@@ -1,6 +1,6 @@
 resolvers += Resolver.sonatypeRepo("releases")
 
-addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.0.6")
+addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.3.4")
 
 val quillMacroVersion = "0.8.8.2"
 
@@ -8,6 +8,6 @@ addSbtPlugin("com.github.ajozwik" % "sbt-quill-crud-generic" % quillMacroVersion
 
 addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "1.0.0")
 
-addSbtPlugin("com.sksamuel.scapegoat" %% "sbt-scapegoat" % "1.0.9")
+addSbtPlugin("com.sksamuel.scapegoat" %% "sbt-scapegoat" % "1.1.0")
 
 addSbtPlugin("com.typesafe.sbt" % "sbt-license-report" % "1.2.0")
