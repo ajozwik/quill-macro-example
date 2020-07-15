@@ -1,14 +1,14 @@
 import pl.jozwik.quillgeneric.sbt._
 
+ThisBuild / resolvers += Resolver.sonatypeRepo("releases")
+
+ThisBuild / resolvers += Resolver.sonatypeRepo("snapshots")
+
 val `scalaVersion_2.13` = "2.13.3"
 
 val `scalaVersion_2.12` = "2.12.12"
 
 name := "quill-macro-example"
-
-resolvers += Resolver.sonatypeRepo("releases")
-
-resolvers += Resolver.sonatypeRepo("snapshots")
 
 ThisBuild / scalaVersion := `scalaVersion_2.12`
 
@@ -35,9 +35,9 @@ ThisBuild / scalacOptions ++= Seq(
   "-language:postfixOps"
 )
 
-val `org.scalatest_scalatest` = "org.scalatest" %% "scalatest" % "3.0.8" % "test"
+val `org.scalatest_scalatest` = "org.scalatest" %% "scalatest" % "3.2.0" % "test"
 
-val `org.scalacheck_scalacheck` = "org.scalacheck" %% "scalacheck" % "1.14.0" % "test"
+val `org.scalacheck_scalacheck` = "org.scalacheck" %% "scalacheck" % "1.14.3" % "test"
 
 val `com.typesafe.scala-logging_scala-logging` = "com.typesafe.scala-logging" %% "scala-logging" % "3.9.2"
 
@@ -47,7 +47,7 @@ val `com.h2database_h2` = "com.h2database" % "h2" % "1.4.200"
 
 val `org.cassandraunit_cassandra-unit` = "org.cassandraunit" % "cassandra-unit" % "3.11.2.0"
 
-val `com.datastax.cassandra_cassandra-driver-extras` = "com.datastax.cassandra" % "cassandra-driver-extras" % "3.7.2"
+val `com.datastax.cassandra_cassandra-driver-extras` = "com.datastax.cassandra" % "cassandra-driver-extras" % "3.9.0"
 
 val basePackage        = "pl.jozwik.example"
 val domainModelPackage = s"$basePackage.domain.model"
@@ -55,7 +55,7 @@ val domainModelPackage = s"$basePackage.domain.model"
 lazy val readQuillMacroVersionSbt = {
   val source        = scala.io.Source.fromFile(new java.io.File("project", "plugins.sbt"))
   val lineIterator  = source.getLines()
-  val line          = lineIterator.find(line => line.contains("quillMacroVersion")).getOrElse("""val quillMacroVersion = "0.8.1" """)
+  val line          = lineIterator.find(line => line.contains("quillMacroVersion")).getOrElse("""val quillMacroVersion = "0.9.0" """)
   val versionString = line.split("=")(1).trim
   source.close()
   versionString.replace("\"", "")
@@ -63,6 +63,32 @@ lazy val readQuillMacroVersionSbt = {
 
 lazy val common = projectWithName("common", file("common"))
   .settings(libraryDependencies ++= Seq("com.github.ajozwik" %% "macro-quill" % readQuillMacroVersionSbt))
+
+val generateAsyncRepositoryPackage = s"$basePackage.repository.async"
+val repositoryAsyncPackage         = s"$basePackage.async.impl"
+
+lazy val async = projectWithSbtPlugin("async", file("async"))
+  .settings(
+    generateAsyncDescription := Seq(
+          RepositoryDescription(
+            s"$domainModelPackage.Address",
+            BeanIdClass(s"$domainModelPackage.AddressId"),
+            s"$generateAsyncRepositoryPackage.AddressRepositoryGen",
+            true,
+            Option(s"$repositoryAsyncPackage.AddressRepositoryImpl[Dialect, Naming, Connection]"),
+            None,
+            Map("city" -> "city")
+          ),
+          RepositoryDescription(
+            s"$domainModelPackage.Person",
+            BeanIdClass(s"$domainModelPackage.PersonId"),
+            s"$generateAsyncRepositoryPackage.PersonRepositoryGen",
+            true,
+            Option(s"$repositoryAsyncPackage.PersonRepositoryImpl[Dialect, Naming, Connection]"),
+            None
+          )
+        )
+  )
 
 val generateRepositoryPackage = s"$basePackage.repository"
 val repositoryPackage         = s"$basePackage.sync.impl"

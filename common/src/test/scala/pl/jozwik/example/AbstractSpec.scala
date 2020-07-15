@@ -4,11 +4,12 @@ import java.time.{ LocalDate, LocalDateTime }
 
 import com.typesafe.scalalogging.StrictLogging
 import org.scalatest.concurrent.TimeLimitedTests
+import org.scalatest.matchers.should.Matchers
 import org.scalatest.time.{ Seconds, Span }
-import org.scalatest.{ Matchers, WordSpecLike }
+import org.scalatest.wordspec.AnyWordSpecLike
 import pl.jozwik.example.domain.model.AddressId
 
-trait AbstractSpec extends WordSpecLike with TimeLimitedTests with Matchers with StrictLogging {
+trait AbstractSpec extends AnyWordSpecLike with TimeLimitedTests with Matchers with StrictLogging {
   val TIMEOUT_SECONDS              = 6
   val timeLimit                    = Span(TIMEOUT_SECONDS, Seconds)
   protected val now: LocalDateTime = LocalDateTime.now()
