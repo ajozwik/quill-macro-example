@@ -1,5 +1,8 @@
 import pl.jozwik.quillgeneric.sbt._
 
+lazy val common = projectWithName("common", file("common"))
+  .settings(libraryDependencies ++= Seq("com.github.ajozwik" %% "macro-quill" % version.value))
+
 ThisBuild / resolvers += Resolver.sonatypeRepo("releases")
 
 ThisBuild / resolvers += Resolver.sonatypeRepo("snapshots")
@@ -51,18 +54,6 @@ val `com.datastax.cassandra_cassandra-driver-extras` = "com.datastax.cassandra" 
 
 val basePackage        = "pl.jozwik.example"
 val domainModelPackage = s"$basePackage.domain.model"
-
-lazy val readQuillMacroVersionSbt = {
-  val source        = scala.io.Source.fromFile(new java.io.File("project", "plugins.sbt"))
-  val lineIterator  = source.getLines()
-  val line          = lineIterator.find(line => line.contains("quillMacroVersion")).getOrElse("""val quillMacroVersion = "0.9.0" """)
-  val versionString = line.split("=")(1).trim
-  source.close()
-  versionString.replace("\"", "")
-}
-
-lazy val common = projectWithName("common", file("common"))
-  .settings(libraryDependencies ++= Seq("com.github.ajozwik" %% "macro-quill" % readQuillMacroVersionSbt))
 
 val generateAsyncRepositoryPackage = s"$basePackage.repository.async"
 val repositoryAsyncPackage         = s"$basePackage.async.impl"
@@ -270,7 +261,5 @@ def projectWithName(name: String, file: File): Project =
             `ch.qos.logback_logback-classic`,
             `com.h2database_h2` % Test
           ),
-      licenseReportTitle := "Copyright (c) 2019 Andrzej Jozwik",
-      licenseSelection := Seq(LicenseCategory.MIT),
       sources in (Compile, doc) := Seq.empty
     )
