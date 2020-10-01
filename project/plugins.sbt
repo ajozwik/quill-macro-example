@@ -1,4 +1,4 @@
-val quillMacroVersion = sys.props.getOrElse("plugin.version", "0.9.0")
+val quillMacroVersion = sys.props.getOrElse("plugin.version", "0.9.1")
 
 resolvers += Resolver.sonatypeRepo("releases")
 

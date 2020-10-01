@@ -19,7 +19,7 @@ ThisBuild / crossScalaVersions := Seq(`scalaVersion_2.13`, `scalaVersion_2.12`)
 
 ThisBuild / scapegoatVersion := {
   CrossVersion.partialVersion(scalaVersion.value) match {
-    case Some((2, n)) if n >= 13 => "1.4.5"
+    case Some((2, n)) if n >= 13 => "1.4.6"
     case _                       => "1.3.11"
   }
 }
@@ -38,7 +38,7 @@ ThisBuild / scalacOptions ++= Seq(
   "-language:postfixOps"
 )
 
-val `org.scalatest_scalatest` = "org.scalatest" %% "scalatest" % "3.2.0" % "test"
+val `org.scalatest_scalatest` = "org.scalatest" %% "scalatest" % "3.2.2" % "test"
 
 val `org.scalacheck_scalacheck` = "org.scalacheck" %% "scalacheck" % "1.14.3" % "test"
 
