@@ -4,7 +4,7 @@ resolvers += Resolver.sonatypeRepo("releases")
 
 resolvers += Resolver.sonatypeRepo("snapshots")
 
-addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.4.0")
+addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.4.2")
 
 addSbtPlugin("com.github.ajozwik" % "sbt-quill-crud-generic" % quillMacroVersion)
 
