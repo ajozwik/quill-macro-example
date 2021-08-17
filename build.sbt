@@ -1,15 +1,29 @@
 import pl.jozwik.quillgeneric.sbt._
 
+lazy val readQuillMacroVersionSbt = sys.props.get("plugin.version") match {
+  case Some(pluginVersion) =>
+    pluginVersion
+  case _ =>
+    "1.0.0"
+}
+
+def init(): Unit = {
+  sys.props.put("quill.macro.log", false.toString)
+  sys.props.put("quill.binds.log", true.toString)
+}
+
+val fake: Unit = init()
+
 lazy val common = projectWithName("common", file("common"))
-  .settings(libraryDependencies ++= Seq("com.github.ajozwik" %% "macro-quill" % version.value))
+  .settings(libraryDependencies ++= Seq("com.github.ajozwik" %% "macro-quill" % readQuillMacroVersionSbt))
 
 ThisBuild / resolvers += Resolver.sonatypeRepo("releases")
 
 ThisBuild / resolvers += Resolver.sonatypeRepo("snapshots")
 
-val `scalaVersion_2.13` = "2.13.3"
+val `scalaVersion_2.13` = "2.13.6"
 
-val `scalaVersion_2.12` = "2.12.12"
+val `scalaVersion_2.12` = "2.12.14"
 
 name := "quill-macro-example"
 
@@ -17,14 +31,11 @@ ThisBuild / scalaVersion := `scalaVersion_2.12`
 
 ThisBuild / crossScalaVersions := Seq(`scalaVersion_2.13`, `scalaVersion_2.12`)
 
-ThisBuild / scapegoatVersion := {
-  CrossVersion.partialVersion(scalaVersion.value) match {
-    case Some((2, n)) if n >= 13 => "1.4.6"
-    case _                       => "1.3.11"
-  }
-}
+ThisBuild / scapegoatVersion := "1.4.9"
 
 ThisBuild / organization := "pl.jozwik.demo"
+
+ThisBuild / scalacOptions ++= Seq("-Dquill.macro.log=false")
 
 ThisBuild / scalacOptions ++= Seq(
   "-encoding",
@@ -38,19 +49,23 @@ ThisBuild / scalacOptions ++= Seq(
   "-language:postfixOps"
 )
 
-val `org.scalatest_scalatest` = "org.scalatest" %% "scalatest" % "3.2.3" % "test"
+val scalaTestVersion = "3.2.9"
 
-val `org.scalacheck_scalacheck` = "org.scalacheck" %% "scalacheck" % "1.15.2" % "test"
+val `org.scalatest_scalatest` = "org.scalatest" %% "scalatest" % scalaTestVersion % Test
 
-val `com.typesafe.scala-logging_scala-logging` = "com.typesafe.scala-logging" %% "scala-logging" % "3.9.2"
+val `org.scalacheck_scalacheck` = "org.scalacheck" %% "scalacheck" % "1.15.4" % Test
 
-val `ch.qos.logback_logback-classic` = "ch.qos.logback" % "logback-classic" % "1.2.3"
+val `org.scalatestplus_scalacheck-1-15` = "org.scalatestplus" %% "scalacheck-1-15" % s"$scalaTestVersion.0" % Test
+
+val `com.typesafe.scala-logging_scala-logging` = "com.typesafe.scala-logging" %% "scala-logging" % "3.9.4"
+
+val `ch.qos.logback_logback-classic` = "ch.qos.logback" % "logback-classic" % "1.2.5"
 
 val `com.h2database_h2` = "com.h2database" % "h2" % "1.4.200"
 
 val `org.cassandraunit_cassandra-unit` = "org.cassandraunit" % "cassandra-unit" % "3.11.2.0"
 
-val `com.datastax.cassandra_cassandra-driver-extras` = "com.datastax.cassandra" % "cassandra-driver-extras" % "3.9.0"
+val `com.datastax.cassandra_cassandra-driver-extras` = "com.datastax.cassandra" % "cassandra-driver-extras" % "3.11.0"
 
 val basePackage        = "pl.jozwik.example"
 val domainModelPackage = s"$basePackage.domain.model"
@@ -222,7 +237,7 @@ lazy val cassandra = projectWithCassandra("cassandra", file("cassandra"))
         s"$generateCassandraAsyncRepositoryPackage.AddressRepositoryGen"
       )
     ),
-    parallelExecution in Test := false
+    Test / parallelExecution := false
   )
 
 val generateCassandraMonixRepositoryPackage = s"$cassandraPackage.monix.repository"
@@ -242,13 +257,13 @@ lazy val cassandraMonix = projectWithCassandra("cassandra-monix", file("cassandr
 def projectWithCassandra(name: String, file: File): Project =
   projectWithSbtPlugin(name, file)
     .settings(
-      Test / fork := true,
       libraryDependencies ++= Seq(`org.cassandraunit_cassandra-unit` % Test, `com.datastax.cassandra_cassandra-driver-extras` % Test)
     )
 
 def projectWithSbtPlugin(name: String, file: File): Project =
   projectWithName(name, file)
     .dependsOn(common, common % "test -> test")
+    .settings(Test / fork := true)
     .enablePlugins(QuillRepositoryPlugin)
 
 def projectWithName(name: String, file: File): Project =
@@ -257,9 +272,10 @@ def projectWithName(name: String, file: File): Project =
       libraryDependencies ++= Seq(
         `org.scalatest_scalatest`,
         `org.scalacheck_scalacheck`,
+        `org.scalatestplus_scalacheck-1-15`,
         `com.typesafe.scala-logging_scala-logging`,
         `ch.qos.logback_logback-classic`,
         `com.h2database_h2` % Test
       ),
-      sources in (Compile, doc) := Seq.empty
+      Compile / doc / sources := Seq.empty
     )
