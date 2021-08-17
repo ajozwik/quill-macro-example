@@ -6,15 +6,13 @@ cache:
     - $HOME/.sbt/boot
 
 language: scala
-scala:
-  - 2.12.12
-  - 2.13.3
+
 
 jdk:
   - openjdk8
 
 script:
-  - sbt ++$TRAVIS_SCALA_VERSION -Dquill.macro.log=false -Dquill.binds.log=true clean test scalastyle
+  - sbt -Dquill.macro.log=false -Dquill.binds.log=true clean +test +scalastyle
 
 after_success:
    # Tricks to avoid unnecessary cache updates
