@@ -2,7 +2,7 @@ val quillMacroVersion = sys.props.get("plugin.version") match {
   case Some(pluginVersion) =>
     pluginVersion
   case _ =>
-    "1.0.0"
+    "1.0.1"
 }
 
 resolvers += Resolver.sonatypeRepo("releases")
