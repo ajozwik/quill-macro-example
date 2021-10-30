@@ -3,7 +3,7 @@ package pl.jozwik.example.domain.model
 import pl.jozwik.quillgeneric.quillmacro.WithId
 
 object ProductId {
-  val empty = ProductId(0)
+  val empty: ProductId = ProductId(0)
 }
 
 final case class ProductId(value: Long) extends AnyVal

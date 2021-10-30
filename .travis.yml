@@ -12,7 +12,7 @@ jdk:
   - openjdk8
 
 script:
-  - sbt -Dquill.macro.log=false -Dquill.binds.log=true clean +test +scalastyle
+  - sbt -Dquill.macro.log=false -Dquill.binds.log=true +clean +test
 
 after_success:
    # Tricks to avoid unnecessary cache updates

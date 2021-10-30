@@ -13,6 +13,8 @@ addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.4.3")
 
 addSbtPlugin("com.github.ajozwik" % "sbt-quill-crud-generic" % quillMacroVersion)
 
-addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "1.0.0")
+addSbtPlugin("org.wartremover" % "sbt-wartremover" % "2.4.16")
 
-addSbtPlugin("com.sksamuel.scapegoat" %% "sbt-scapegoat" % "1.1.0")
+addSbtPlugin("com.sksamuel.scapegoat" %% "sbt-scapegoat" % "1.1.1")
+
+addSbtPlugin("com.typesafe.sbt" % "sbt-license-report" % "1.2.0")

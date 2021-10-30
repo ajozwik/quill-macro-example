@@ -23,7 +23,7 @@ ThisBuild / resolvers += Resolver.sonatypeRepo("snapshots")
 
 val `scalaVersion_2.13` = "2.13.6"
 
-val `scalaVersion_2.12` = "2.12.14"
+val `scalaVersion_2.12` = "2.12.15"
 
 name := "quill-macro-example"
 
@@ -31,7 +31,7 @@ ThisBuild / scalaVersion := `scalaVersion_2.12`
 
 ThisBuild / crossScalaVersions := Seq(`scalaVersion_2.13`, `scalaVersion_2.12`)
 
-ThisBuild / scapegoatVersion := "1.4.9"
+ThisBuild / scapegoatVersion := "1.4.10"
 
 ThisBuild / organization := "pl.jozwik.demo"
 
@@ -39,8 +39,8 @@ ThisBuild / scalacOptions ++= Seq("-Dquill.macro.log=false")
 
 ThisBuild / scalacOptions ++= Seq(
   "-encoding",
-  "utf8",             // Option and arguments on same line
-  "-Xfatal-warnings", // New lines for each options
+  "utf8", // Option and arguments on same line
+//  "-Xfatal-warnings", // New lines for each options
   "-deprecation",
   "-unchecked",
   "-language:implicitConversions",
@@ -49,7 +49,7 @@ ThisBuild / scalacOptions ++= Seq(
   "-language:postfixOps"
 )
 
-val scalaTestVersion = "3.2.9"
+val scalaTestVersion = "3.2.10"
 
 val `org.scalatest_scalatest` = "org.scalatest" %% "scalatest" % scalaTestVersion % Test
 
@@ -59,7 +59,7 @@ val `org.scalatestplus_scalacheck-1-15` = "org.scalatestplus" %% "scalacheck-1-1
 
 val `com.typesafe.scala-logging_scala-logging` = "com.typesafe.scala-logging" %% "scala-logging" % "3.9.4"
 
-val `ch.qos.logback_logback-classic` = "ch.qos.logback" % "logback-classic" % "1.2.5"
+val `ch.qos.logback_logback-classic` = "ch.qos.logback" % "logback-classic" % "1.2.6"
 
 val `com.h2database_h2` = "com.h2database" % "h2" % "1.4.200"
 
@@ -277,5 +277,9 @@ def projectWithName(name: String, file: File): Project =
         `ch.qos.logback_logback-classic`,
         `com.h2database_h2` % Test
       ),
+      licenseReportTitle := s"Copyright (c) ${java.time.LocalDate.now.getYear} Andrzej Jozwik",
+      licenseSelection := Seq(LicenseCategory.MIT),
       Compile / doc / sources := Seq.empty
+//      ,
+//      Compile / compile / wartremoverWarnings ++= Warts.allBut(Wart.ImplicitParameter, Wart.DefaultArguments)
     )
