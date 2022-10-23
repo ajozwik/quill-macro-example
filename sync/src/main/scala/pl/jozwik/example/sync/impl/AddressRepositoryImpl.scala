@@ -14,7 +14,6 @@ trait AddressRepositoryImpl[Dialect <: SqlIdiom, Naming <: NamingStrategy]
   extends JdbcRepositoryWithGeneratedId[AddressId, Address, Dialect, Naming]
   with AddressRepository[Try] {
 
-  @SuppressWarnings(Array("org.wartremover.warts.Nothing"))
   def setCountryIfCity(city: String, country: String): Try[Long] = Try {
     import context._
     val now = LocalDateTime.now

@@ -2,19 +2,17 @@ val quillMacroVersion = sys.props.get("plugin.version") match {
   case Some(pluginVersion) =>
     pluginVersion
   case _ =>
-    "1.0.1"
+    "1.1.1"
 }
 
-resolvers += Resolver.sonatypeRepo("releases")
+ThisBuild / resolvers ++= Resolver.sonatypeOssRepos("releases")
 
-resolvers += Resolver.sonatypeRepo("snapshots")
+ThisBuild / resolvers ++= Resolver.sonatypeOssRepos("snapshots")
 
-addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.4.3")
+addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.4.6")
 
 addSbtPlugin("com.github.ajozwik" % "sbt-quill-crud-generic" % quillMacroVersion)
 
-addSbtPlugin("org.wartremover" % "sbt-wartremover" % "2.4.16")
+addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "1.0.0")
 
 addSbtPlugin("com.sksamuel.scapegoat" %% "sbt-scapegoat" % "1.1.1")
-
-addSbtPlugin("com.typesafe.sbt" % "sbt-license-report" % "1.2.0")

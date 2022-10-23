@@ -13,7 +13,6 @@ trait AddressRepositoryImpl[Dialect <: SqlIdiom, Naming <: NamingStrategy]
   extends MonixJdbcRepositoryWithGeneratedId[AddressId, Address, Dialect, Naming]
   with AddressRepository[Task] {
 
-  @SuppressWarnings(Array("org.wartremover.warts.Nothing"))
   def setCountryIfCity(city: String, country: String): Task[Long] = {
     import context._
     val now = LocalDateTime.now
@@ -23,7 +22,7 @@ trait AddressRepositoryImpl[Dialect <: SqlIdiom, Naming <: NamingStrategy]
         setValue(_.country, country),
         setValue(_.updated, Option(now))
       )
-    for { r <- run(q) } yield { r }
+    run(q)
   }
 
 }
